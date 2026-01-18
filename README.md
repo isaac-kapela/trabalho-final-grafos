@@ -51,18 +51,48 @@ make clean
 make cleanall
 ```
 
-## Execução
+## Como Usar
+
+### 1. Testar a Infraestrutura
 
 ```bash
-# Testar infraestrutura
 ./bin/dcmst teste
+```
 
-# Ler uma instância de arquivo
+Testa todos os componentes básicos: grafo, randomização, logger e exportação.
+
+### 2. Instâncias OR-Library (Recomendado)
+
+As instâncias oficiais já estão disponíveis em `dcmst/Data/`:
+
+```bash
+# Formato: ./bin/dcmst orlib <arquivo> <grau_maximo>
+./bin/dcmst orlib dcmst/Data/crd101 3
+./bin/dcmst orlib dcmst/Data/crd103 5
+./bin/dcmst orlib dcmst/Data/rand200 4
+./bin/dcmst orlib dcmst/Data/str305 5
+```
+
+**Instâncias disponíveis:**
+- `crd101, crd103, crd105, crd108, crd109, crd500, crd700, crd705`
+- `rand200`
+- `str305, str505, str509, str701, str702, str1001, str1005`
+- `sym306, sym708`
+- `shrd259`
+- `genhard`
+
+Formato OR-Library: usa coordenadas (x,y) e calcula distâncias euclidianas automaticamente para criar grafo completo.
+
+### 3. Instâncias Customizadas (Opcional)
+
+Para usar suas próprias instâncias:
+
+```bash
+# Formato: ./bin/dcmst ler <arquivo>
 ./bin/dcmst ler instances/exemplo.txt
 ```
 
-## Formato das Instâncias
-
+**Formato do arquivo:**
 ```
 <num_vertices> <num_arestas> <grau_maximo>
 <origem> <destino> <peso>
@@ -70,18 +100,46 @@ make cleanall
 ...
 ```
 
-Os vértices devem ser numerados a partir de 1.
+**Importante:** Os vértices devem ser numerados a partir de 1.
+
+**Exemplo (instances/exemplo.txt):**
+```
+5 7 3
+1 2 1.5
+2 3 2.0
+3 4 1.0
+4 5 3.0
+5 1 2.5
+1 3 4.0
+2 5 1.8
+```
+
+## Visualização de Grafos
+
+Os arquivos `.txt` gerados em `results/` podem ser visualizados no CS Academy Graph Editor:
+
+🔗 https://csacademy.com/app/graph_editor/
+
+Basta copiar o conteúdo do arquivo e colar no editor.
+
+## Arquivos Gerados
+
+Após executar o programa, os seguintes arquivos são criados em `results/`:
+
+- `<nome_instancia>_grafo.txt` - Grafo completo para visualização
+- `log_teste.csv` - Log das execuções (quando implementados os algoritmos)
 
 ## Próximos Passos
 
+- [x] Infraestrutura completa
+- [x] Leitura de instâncias OR-Library
 - [ ] Implementar algoritmo guloso
 - [ ] Implementar algoritmo guloso randomizado
 - [ ] Implementar algoritmo guloso randomizado reativo
-- [ ] Baixar instâncias oficiais da OR-Library
-- [ ] Executar experimentos
-- [ ] Gerar relatório
+- [ ] Executar experimentos (10 execuções por instância)
+- [ ] Gerar relatório com análise dos resultados
 
-## Instâncias Oficiais
+## Referências
 
-As instâncias de referência podem ser obtidas em:
+Instâncias oficiais da OR-Library:
 https://andreas-ernst.github.io/Mathprog-ORlib/info/readmeDCMST.html

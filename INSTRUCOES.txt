@@ -45,20 +45,52 @@ Arquivos gerados em results/:
 - teste_grafo.txt         (grafo para visualização)
 
 
-PASSO 3: LER UMA INSTÂNCIA DE ARQUIVO
+PASSO 3: TESTAR COM DIFERENTES INSTÂNCIAS
+------------------------------------------
+
+Você tem duas opções para testar o programa:
+
+A INSTÂNCIAS OR-LIBRARY (RECOMENDADO)
+---------------------------------------
+
+O projeto contém instâncias oficiais da OR-Library em dcmst/Data/:
+
+    ./bin/dcmst orlib dcmst/Data/crd101 3
+
+Instâncias disponíveis:
+- crd101, crd103, crd105, crd108, crd109, crd500, crd700, crd705
+- rand200
+- str305, str505, str509, str701, str702, str1001, str1005
+- sym306, sym708
+- shrd259
+- genhard
+
+Formato do comando:
+    ./bin/dcmst orlib <arquivo> <grau_maximo>
+
+O formato OR-Library usa coordenadas (x,y) e calcula distâncias euclidianas
+para criar um grafo completo automaticamente.
+
+Exemplos práticos com OR-Library:
+    ./bin/dcmst orlib dcmst/Data/crd103 5
+    ./bin/dcmst orlib dcmst/Data/rand200 4
+    ./bin/dcmst orlib dcmst/Data/str305 5
+
+
+B) INSTÂNCIAS CUSTOMIZADAS (OPCIONAL)
 --------------------------------------
 
-Para testar a leitura de instâncias:
+Para testar com suas próprias instâncias no formato padrão:
 
     ./bin/dcmst ler instances/exemplo.txt
 
-Isso irá carregar e exibir informações sobre a instância.
+NOTA: Você precisa criar o arquivo instances/exemplo.txt primeiro!
 
 
-FORMATO DAS INSTÂNCIAS
-----------------------
+FORMATO DAS INSTÂNCIAS CUSTOMIZADAS
+-----------------------------------
 
-As instâncias devem seguir o formato:
+As instâncias customizadas devem seguir o formato:
 
     <num_vertices> <num_arestas> <grau_maximo>
     <origem> <destino> <peso>
@@ -101,7 +133,13 @@ Executar com comando específico:
 
 Comandos disponíveis:
     teste              - Testa a infraestrutura básica
-    ler <arquivo>      - Lê uma instância de arquivo
+    ler <arquivo>      - Lê uma instância customizada
+    orlib <arquivo> <grau_max>  - Lê instância OR-Library (recomendado)
+
+Exemplo de uso das instâncias OR-Library:
+    ./bin/dcmst orlib dcmst/Data/crd101 3
+    ./bin/dcmst orlib dcmst/Data/rand200 5
+    ./bin/dcmst orlib dcmst/Data/str305 4
 
 
 VISUALIZAR GRAFOS
@@ -132,8 +170,8 @@ PRÓXIMOS PASSOS
 
 Após verificar que a infraestrutura está funcionando:
 
-1. Baixar instâncias oficiais da OR-Library:
-   https://andreas-ernst.github.io/Mathprog-ORlib/info/readmeDCMST.html
+1. As instâncias oficiais da OR-Library já estão disponíveis em dcmst/Data/
+   Use o comando: ./bin/dcmst orlib dcmst/Data/<instancia> <grau_max>
 
 2. Implementar algoritmos:
    - Algoritmo guloso
@@ -159,17 +197,19 @@ Erro ao executar:
 - Execute a partir do diretório raiz do projeto
 
 Arquivo de instância não encontrado:
-- Verifique se o arquivo existe no diretório instances/
-- Use caminho relativo: instances/nome_arquivo.txt
-- Ou caminho absoluto completo
+- Para instâncias OR-Library: use dcmst/Data/<nome_instancia>
+  Exemplo: ./bin/dcmst orlib dcmst/Data/crd101 3
+  
+- Para suas próprias instâncias: use instances/<nome_arquivo>
+  Exemplo: ./bin/dcmst ler instances/exemplo.txt
+  
+- Verifique se o arquivo realmente existe no diretório correto
+- Use caminho relativo ou absoluto completo
+
+Qual formato usar?
+- Use "orlib" para instâncias oficiais do OR-Library (formato coordenadas)
+- Use "ler" para suas instâncias customizadas (formato lista de arestas)
 
 
-CONTATO
--------
-
-Em caso de dúvidas sobre o projeto, consulte:
-- README.md (documentação técnica)
-- Código fonte comentado em src/
-- Especificação do trabalho (Classroom)
 
 ================================================================================
