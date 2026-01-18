@@ -101,3 +101,46 @@ void Logger::registrar(const DadosExecucao& dados) {
     file.close();
     std::cout << "Log registrado em " << nomeArquivo << std::endl;
 }
+
+void Logger::registrarLeitura(const DadosLeitura& dados) {
+    // Verifica se arquivo existe e tem cabeçalho de leitura
+    bool precisaCabecalho = true;
+    std::ifstream testeArquivo(nomeArquivo);
+    if (testeArquivo.is_open()) {
+        std::string linha;
+        if (std::getline(testeArquivo, linha)) {
+            if (linha.find("vertices") != std::string::npos) {
+                precisaCabecalho = false;
+            }
+        }
+        testeArquivo.close();
+    }
+    
+    // Cria arquivo com cabeçalho se necessário
+    if (precisaCabecalho) {
+        std::ofstream file(nomeArquivo);
+        if (!file.is_open()) {
+            std::cerr << "ERRO: Não foi possível criar o arquivo de log: " << nomeArquivo << std::endl;
+            return;
+        }
+        file << "timestamp,instance,vertices,edges,max_degree,format,connected\n";
+        file.close();
+    }
+    
+    // Adiciona os dados
+    std::ofstream file(nomeArquivo, std::ios::app);
+    if (!file.is_open()) {
+        std::cerr << "ERRO: Não foi possível abrir o arquivo de log: " << nomeArquivo << std::endl;
+        return;
+    }
+    
+    file << dados.timestamp << ","
+         << dados.nomeInstancia << ","
+         << dados.numVertices << ","
+         << dados.numArestas << ","
+         << dados.grauMaximo << ","
+         << dados.formato << ","
+         << (dados.conexo ? "Yes" : "No") << "\n";
+    
+    file.close();
+}

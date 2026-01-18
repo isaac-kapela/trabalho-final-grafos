@@ -28,6 +28,21 @@ struct DadosExecucao {
 };
 
 /**
+ * Estrutura para armazenar dados de leitura de instâncias
+ */
+struct DadosLeitura {
+    std::string timestamp;
+    std::string nomeInstancia;
+    int numVertices;
+    int numArestas;
+    int grauMaximo;
+    std::string formato;
+    bool conexo;
+
+    DadosLeitura() : numVertices(0), numArestas(0), grauMaximo(0), conexo(false) {}
+};
+
+/**
  * Classe para gerenciar logs de execução em formato CSV
  */
 class Logger {
@@ -38,6 +53,7 @@ private:
 public:
     Logger(const std::string& nomeArquivo);
     void registrar(const DadosExecucao& dados);
+    void registrarLeitura(const DadosLeitura& dados);
     static std::string getTimestampAtual();
 
 private:
