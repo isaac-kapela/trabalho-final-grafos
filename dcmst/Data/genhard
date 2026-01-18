@@ -1,0 +1,7 @@
+
+foreach n (15 20 25 30)
+  foreach i (0 1 2 3 4 5 6 7 8 9)
+    hard $n > shrd$n$i
+    sleep 2
+  end
+end
