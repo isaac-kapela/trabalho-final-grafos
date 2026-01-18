@@ -72,10 +72,12 @@ int main(int argc, char* argv[]) {
         std::cout << "Uso: " << argv[0] << " <comando> [parâmetros]" << std::endl;
         std::cout << "\nComandos disponíveis:" << std::endl;
         std::cout << "  teste              - Testa a infraestrutura básica" << std::endl;
-        std::cout << "  ler <arquivo>      - Lê uma instância de arquivo" << std::endl;
+        std::cout << "  ler <arquivo>      - Lê uma instância de arquivo (formato padrão)" << std::endl;
+        std::cout << "  orlib <arquivo> <grau_max> - Lê instância OR-Library (coordenadas)" << std::endl;
         std::cout << "\nExemplos:" << std::endl;
         std::cout << "  " << argv[0] << " teste" << std::endl;
         std::cout << "  " << argv[0] << " ler instances/exemplo.txt" << std::endl;
+        std::cout << "  " << argv[0] << " orlib dcmst/Data/crd101 3" << std::endl;
         return 1;
     }
     
@@ -99,6 +101,63 @@ int main(int argc, char* argv[]) {
             std::cout << "  Arestas: " << grafo.getNumeroArestas() << std::endl;
             std::cout << "  Grau máximo: " << grauMaximo << std::endl;
             std::cout << "  Conexo: " << (grafo.ehConexo() ? "Sim" : "Não") << std::endl;
+            
+            // Exportar para visualização
+            std::string arquivoSaida = "results/" + grafo.getNomeInstancia() + "_grafo.txt";
+            grafo.exportarParaGraphEditor(arquivoSaida);
+            std::cout << "\n✓ Grafo exportado para: " << arquivoSaida << std::endl;
+            
+            // Registrar no log simplificado
+            Logger logger("results/log_leitura.csv");
+            DadosLeitura dados;
+            dados.timestamp = Logger::getTimestampAtual();
+            dados.nomeInstancia = grafo.getNomeInstancia();
+            dados.numVertices = grafo.getNumeroVertices();
+            dados.numArestas = grafo.getNumeroArestas();
+            dados.grauMaximo = grauMaximo;
+            dados.formato = "Padrão";
+            dados.conexo = grafo.ehConexo();
+            logger.registrarLeitura(dados);
+            std::cout << "✓ Log registrado em: results/log_leitura.csv" << std::endl;
+            
+        } catch (const std::exception& e) {
+            std::cerr << "✗ ERRO: " << e.what() << std::endl;
+            return 1;
+        }
+    } else if (comando == "orlib" && argc >= 4) {
+        try {
+            std::string arquivo = argv[2];
+            int grauMaximo = std::stoi(argv[3]);
+            
+            std::cout << "\n=== LEITURA DE INSTÂNCIA OR-LIBRARY ===" << std::endl;
+            std::cout << "Arquivo: " << arquivo << std::endl;
+            std::cout << "Grau máximo: " << grauMaximo << std::endl;
+            
+            Grafo grafo = LeitorInstancia::lerInstanciaORLibrary(arquivo, grauMaximo);
+            
+            std::cout << "✓ Instância carregada com sucesso!" << std::endl;
+            std::cout << "  Nome: " << grafo.getNomeInstancia() << std::endl;
+            std::cout << "  Vértices: " << grafo.getNumeroVertices() << std::endl;
+            std::cout << "  Arestas: " << grafo.getNumeroArestas() << std::endl;
+            std::cout << "  Conexo: " << (grafo.ehConexo() ? "Sim" : "Não") << std::endl;
+            
+            // Exportar para visualização
+            std::string arquivoSaida = "results/" + grafo.getNomeInstancia() + "_grafo.txt";
+            grafo.exportarParaGraphEditor(arquivoSaida);
+            std::cout << "\n✓ Grafo exportado para: " << arquivoSaida << std::endl;
+            
+            // Registrar no log simplificado
+            Logger logger("results/log_leitura.csv");
+            DadosLeitura dados;
+            dados.timestamp = Logger::getTimestampAtual();
+            dados.nomeInstancia = grafo.getNomeInstancia();
+            dados.numVertices = grafo.getNumeroVertices();
+            dados.numArestas = grafo.getNumeroArestas();
+            dados.grauMaximo = grauMaximo;
+            dados.formato = "OR-Library";
+            dados.conexo = grafo.ehConexo();
+            logger.registrarLeitura(dados);
+            std::cout << "✓ Log registrado em: results/log_leitura.csv" << std::endl;
             
         } catch (const std::exception& e) {
             std::cerr << "✗ ERRO: " << e.what() << std::endl;
