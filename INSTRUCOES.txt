@@ -50,7 +50,7 @@ PASSO 3: TESTAR COM DIFERENTES INSTÂNCIAS
 
 Você tem duas opções para testar o programa:
 
-A INSTÂNCIAS OR-LIBRARY (RECOMENDADO)
+A INSTÂNCIAS OR-LIBRARY 
 ---------------------------------------
 
 O projeto contém instâncias oficiais da OR-Library em dcmst/Data/:

@@ -75,12 +75,12 @@ int main(int argc, char* argv[]) {
         std::cout << "\nComandos disponíveis:" << std::endl;
         std::cout << "  teste              - Testa a infraestrutura básica" << std::endl;
         std::cout << "  ler <arquivo>      - Lê uma instância de arquivo (formato padrão)" << std::endl;
-        std::cout << "  orlib <arquivo> <grau_max> - Lê instância OR-Library (coordenadas)" << std::endl;
+        std::cout << "  orlib <diretorio> <nome_instancia> <grau_max> - Lê instância OR-Library" << std::endl;
         std::cout << "  resolver <arquivo> <grau_max> <n iteracoes> <n blocos> - Algoritmo Guloso Randomizado Reativo" << std::endl;
         std::cout << "\nExemplos:" << std::endl;
         std::cout << "  " << argv[0] << " teste" << std::endl;
         std::cout << "  " << argv[0] << " ler instances/exemplo.txt" << std::endl;
-        std::cout << "  " << argv[0] << " orlib dcmst/Data/crd101 3" << std::endl;
+        std::cout << "  " << argv[0] << " orlib dcmst/Data crd101 3" << std::endl;
         std::cout << "  " << argv[0] << " resolver dcmst/Data/crd101 3 100 20" << std::endl;
         return 1;
     }
@@ -126,10 +126,12 @@ int main(int argc, char* argv[]) {
             std::cerr << "✗ ERRO: " << e.what() << std::endl;
             return 1;
         }
-    } else if (comando == "orlib" && argc >= 4) {
+    } else if (comando == "orlib" && argc >= 5) {
         try {
-            std::string arquivo = argv[2];
-            int grauMaximo = std::stoi(argv[3]);
+            std::string diretorio = argv[2];
+            std::string nomeArquivo = argv[3];
+            std::string arquivo = diretorio + "/" + nomeArquivo;
+            int grauMaximo = std::stoi(argv[4]);
             
             std::cout << "\n=== LEITURA DE INSTÂNCIA OR-LIBRARY ===" << std::endl;
             std::cout << "Arquivo: " << arquivo << std::endl;
