@@ -55,7 +55,7 @@ A INSTÂNCIAS OR-LIBRARY
 
 O projeto contém instâncias oficiais da OR-Library em dcmst/Data/:
 
-    ./bin/dcmst orlib dcmst/Data/crd101 3
+    ./bin/dcmst orlib dcmst/Data crd101 3
 
 Instâncias disponíveis:
 - crd101, crd103, crd105, crd108, crd109, crd500, crd700, crd705
@@ -66,15 +66,15 @@ Instâncias disponíveis:
 - genhard
 
 Formato do comando:
-    ./bin/dcmst orlib <arquivo> <grau_maximo>
+    ./bin/dcmst orlib <diretorio> <nome_instancia> <grau_maximo>
 
 O formato OR-Library usa coordenadas (x,y) e calcula distâncias euclidianas
 para criar um grafo completo automaticamente.
 
 Exemplos práticos com OR-Library:
-    ./bin/dcmst orlib dcmst/Data/crd103 5
-    ./bin/dcmst orlib dcmst/Data/rand200 4
-    ./bin/dcmst orlib dcmst/Data/str305 5
+    ./bin/dcmst orlib dcmst/Data crd103 5
+    ./bin/dcmst orlib dcmst/Data rand200 4
+    ./bin/dcmst orlib dcmst/Data str305 5
 
 
 B) INSTÂNCIAS CUSTOMIZADAS (OPCIONAL)
@@ -134,12 +134,12 @@ Executar com comando específico:
 Comandos disponíveis:
     teste              - Testa a infraestrutura básica
     ler <arquivo>      - Lê uma instância customizada
-    orlib <arquivo> <grau_max>  - Lê instância OR-Library (recomendado)
+    orlib <diretorio> <nome_instancia> <grau_max>  - Lê instância OR-Library (recomendado)
 
 Exemplo de uso das instâncias OR-Library:
-    ./bin/dcmst orlib dcmst/Data/crd101 3
-    ./bin/dcmst orlib dcmst/Data/rand200 5
-    ./bin/dcmst orlib dcmst/Data/str305 4
+    ./bin/dcmst orlib dcmst/Data crd101 3
+    ./bin/dcmst orlib dcmst/Data rand200 5
+    ./bin/dcmst orlib dcmst/Data str305 4
 
 
 VISUALIZAR GRAFOS
@@ -197,8 +197,8 @@ Erro ao executar:
 - Execute a partir do diretório raiz do projeto
 
 Arquivo de instância não encontrado:
-- Para instâncias OR-Library: use dcmst/Data/<nome_instancia>
-  Exemplo: ./bin/dcmst orlib dcmst/Data/crd101 3
+- Para instâncias OR-Library: use dcmst/Data <nome_instancia>
+  Exemplo: ./bin/dcmst orlib dcmst/Data crd101 3
   
 - Para suas próprias instâncias: use instances/<nome_arquivo>
   Exemplo: ./bin/dcmst ler instances/exemplo.txt
