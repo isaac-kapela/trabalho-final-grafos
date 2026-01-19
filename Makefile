@@ -14,7 +14,8 @@ SOURCES = $(SRC_DIR)/main.cpp \
           $(SRC_DIR)/Grafo.cpp \
           $(SRC_DIR)/LeitorInstancia.cpp \
           $(SRC_DIR)/UtilRandomico.cpp \
-          $(SRC_DIR)/Logger.cpp
+          $(SRC_DIR)/Logger.cpp \
+		  $(SRC_DIR)/AlgGRandReativo.cpp
 
 # Arquivos objeto
 OBJECTS = $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SOURCES))
