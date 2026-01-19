@@ -1,0 +1,22 @@
+# Ignorar binários e objetos compilados
+bin/
+build/
+*.o
+*.out
+
+# Ignorar o executável principal (caso fique na raiz)
+dcmst
+
+# Ignorar resultados e logs de execução
+results/*.csv
+results/*.txt
+!results/.gitkeep
+
+# Ignorar arquivos temporários do sistema/editor
+.DS_Store
+.vscode/
+.idea/
+
+# Ignorar cache do Python (gerado pelos seus scripts)
+__pycache__/
+*.pyc
