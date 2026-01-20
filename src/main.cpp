@@ -8,9 +8,11 @@
 #include "UtilRandomico.h"
 #include "Logger.h"
 #include "AlgGRandReativo.h"
+#include "AlgGuloso.h" // Incluindo sua classe
 #include <iostream>
 #include <string>
 #include <chrono>
+#include <limits> // Necessário para numeric_limits
 
 void testarInfraestrutura() {
     try {
@@ -76,11 +78,15 @@ int main(int argc, char* argv[]) {
         std::cout << "  teste              - Testa a infraestrutura básica" << std::endl;
         std::cout << "  ler <arquivo>      - Lê uma instância de arquivo (formato padrão)" << std::endl;
         std::cout << "  orlib <diretorio> <nome_instancia> <grau_max> - Lê instância OR-Library" << std::endl;
+        std::cout << "  guloso <arquivo> <grau_max>              - Algoritmo Guloso (Kruskal com grau)" << std::endl;
+        std::cout << "  randomizado <arquivo> <grau_max> <alpha> [iteracoes] - Algoritmo Guloso Randomizado" << std::endl;
         std::cout << "  resolver <arquivo> <grau_max> <n iteracoes> <n blocos> - Algoritmo Guloso Randomizado Reativo" << std::endl;
         std::cout << "\nExemplos:" << std::endl;
         std::cout << "  " << argv[0] << " teste" << std::endl;
         std::cout << "  " << argv[0] << " ler instances/exemplo.txt" << std::endl;
         std::cout << "  " << argv[0] << " orlib dcmst/Data crd101 3" << std::endl;
+        std::cout << "  " << argv[0] << " guloso instances/exemplo.txt 3" << std::endl;
+        std::cout << "  " << argv[0] << " randomizado instances/exemplo.txt 3 0.2 30" << std::endl;
         std::cout << "  " << argv[0] << " resolver dcmst/Data/crd101 3 100 20" << std::endl;
         return 1;
     }
@@ -165,6 +171,127 @@ int main(int argc, char* argv[]) {
             std::cerr << "✗ ERRO: " << e.what() << std::endl;
             return 1;
         }
+
+    // COMANDO: GULOSO 
+    } else if (comando == "guloso" && argc >= 4) {
+        try {
+            std::string arquivo = argv[2];
+            int grauMaximoOverride = std::stoi(argv[3]);
+
+            std::cout << "\n=== EXECUÇÃO GULOSO DETERMINÍSTICO ===" << std::endl;
+            std::cout << "Arquivo: " << arquivo << std::endl;
+            std::cout << "Grau Máximo: " << grauMaximoOverride << std::endl;
+
+            // Lógica de leitura 
+            int grauLido = 0;
+            Grafo grafo(0);
+            if (arquivo.find("Data") != std::string::npos) 
+                 grafo = LeitorInstancia::lerInstanciaORLibrary(arquivo, grauMaximoOverride);
+            else 
+                 grafo = LeitorInstancia::lerInstancia(arquivo, grauLido);
+
+            // Execução
+            auto inicio = std::chrono::high_resolution_clock::now();
+            auto resultado = AlgGuloso::executarGuloso(grafo, grauMaximoOverride);
+            auto fim = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> duracao = fim - inicio;
+
+            double custo = resultado.first;
+            std::set<int> arestas = resultado.second;
+
+            if (custo == std::numeric_limits<double>::max()) {
+                std::cout << "\nSOLUÇÃO INVIÁVEL (Não foi possível respeitar o grau ou desconexo)." << std::endl;
+            } else {
+                std::cout << "Custo: " << custo << std::endl;
+                std::cout << "Tempo: " << duracao.count() << "s" << std::endl;
+                
+                // Exportar solução visual
+                std::string arqSaida = "results/solucao_guloso_" + grafo.getNomeInstancia() + ".txt";
+                grafo.exportarSolucaoParaGraphEditor(arestas, arqSaida);
+                std::cout << "Visualização salva em: " << arqSaida << std::endl;
+
+                // Log CSV
+                Logger logger("results/log_execucao.csv");
+                DadosExecucao dados;
+                dados.timestamp = Logger::getTimestampAtual();
+                dados.nomeInstancia = grafo.getNomeInstancia();
+                dados.grauMaximo = grauMaximoOverride;
+                dados.algoritmo = "GulosoConstructive"; 
+                dados.semente = 0; // Determinístico
+                dados.tempoExecucao = duracao.count();
+                dados.custoSolucao = custo;
+                logger.registrar(dados);
+            }
+
+        } catch (const std::exception& e) {
+            std::cerr << "ERRO: " << e.what() << std::endl;
+            return 1;
+        }
+
+    // COMANDO: RANDOMIZADO 
+    } else if (comando == "randomizado" && argc >= 5) {
+        try {
+            std::string arquivo = argv[2];
+            int grauMaximoOverride = std::stoi(argv[3]);
+            double alpha = std::stod(argv[4]);
+            int iteracoes = (argc >= 6) ? std::stoi(argv[5]) : 30; // Padrão 30
+
+            std::cout << "\n=== EXECUÇÃO GULOSO RANDOMIZADO ===" << std::endl;
+            std::cout << "Arquivo: " << arquivo << std::endl;
+            std::cout << "Grau Máximo: " << grauMaximoOverride << std::endl;
+            std::cout << "Alpha: " << alpha << std::endl;
+            std::cout << "Iterações: " << iteracoes << std::endl;
+
+            // Leitura
+            int grauLido = 0;
+            Grafo grafo(0);
+            if (arquivo.find("Data") != std::string::npos) 
+                 grafo = LeitorInstancia::lerInstanciaORLibrary(arquivo, grauMaximoOverride);
+            else 
+                 grafo = LeitorInstancia::lerInstancia(arquivo, grauLido);
+
+            // Execução
+            auto inicio = std::chrono::high_resolution_clock::now();
+            // Chama a função wrapper que roda N vezes e pega a melhor
+            auto resultado = AlgGuloso::resolverRandomizado(grafo, grauMaximoOverride, alpha, iteracoes);
+            auto fim = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> duracao = fim - inicio;
+
+            double custo = resultado.first;
+            std::set<int> arestas = resultado.second;
+
+            if (custo == std::numeric_limits<double>::max()) {
+                std::cout << "\nSOLUÇÃO INVIÁVEL." << std::endl;
+            } else {
+                std::cout << "Melhor Custo Encontrado: " << custo << std::endl;
+                std::cout << "Tempo Total: " << duracao.count() << "s" << std::endl;
+
+                // Exportar
+                std::string arqSaida = "results/solucao_rand_" + grafo.getNomeInstancia() + ".txt";
+                grafo.exportarSolucaoParaGraphEditor(arestas, arqSaida);
+                std::cout << "Visualização salva em: " << arqSaida << std::endl;
+
+                // Log CSV
+                Logger logger("results/log_execucao.csv");
+                DadosExecucao dados;
+                dados.timestamp = Logger::getTimestampAtual();
+                dados.nomeInstancia = grafo.getNomeInstancia();
+                dados.grauMaximo = grauMaximoOverride;
+                dados.algoritmo = "RandomizedGreedy";
+                dados.alpha = alpha;
+                dados.iteracoes = iteracoes;
+                dados.semente = UtilRandomico::obterSementeAtual();
+                dados.tempoExecucao = duracao.count();
+                dados.custoSolucao = custo;
+                logger.registrar(dados);
+            }
+
+        } catch (const std::exception& e) {
+            std::cerr << "ERRO: " << e.what() << std::endl;
+            return 1;
+        }
+
+    // COMANDO: RESOLVER / REATIVO
     } else if (comando == "resolver" && argc >= 4) {
         try {
             std::string arquivo = argv[2];
@@ -173,7 +300,7 @@ int main(int argc, char* argv[]) {
             int maxIter = (argc >= 5) ? std::stoi(argv[4]) : 1000; // Padrão 1000
             int bloco   = (argc >= 6) ? std::stoi(argv[5]) : 50;   // Padrão 50
 
-            std::cout << "\n=== RESOLVENDO DC-MST ===" << std::endl;
+            std::cout << "\n=== RESOLVENDO DC-MST (Reativo) ===" << std::endl;
             std::cout << "Arquivo: " << arquivo << std::endl;
             std::cout << "Grau Máximo: " << grauMaximoOverride << std::endl;
             std::cout << "Iterações: " << maxIter << std::endl;
@@ -238,7 +365,7 @@ int main(int argc, char* argv[]) {
             std::cerr << "ERRO: " << e.what() << std::endl;
             return 1;
         }
-    }else {
+    } else {
         std::cerr << "Comando desconhecido: " << comando << std::endl;
         return 1;
     }
