@@ -15,6 +15,7 @@ SOURCES = $(SRC_DIR)/main.cpp \
           $(SRC_DIR)/LeitorInstancia.cpp \
           $(SRC_DIR)/UtilRandomico.cpp \
           $(SRC_DIR)/Logger.cpp \
+          $(SRC_DIR)/AlgGuloso.cpp \
 		  $(SRC_DIR)/AlgGRandReativo.cpp
 
 # Arquivos objeto
