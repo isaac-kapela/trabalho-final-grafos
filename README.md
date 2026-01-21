@@ -17,26 +17,40 @@ trabalho-final-grafos/
 
 ## Infraestrutura Implementada
 
-✅ **Grafo (ADT)** - Classe completa para manipulação de grafos
+**Grafo (ADT)** - Classe completa para manipulação de grafos
 - Estrutura de dados eficiente (lista de adjacência)
 - Métodos para adicionar arestas, verificar conectividade
 - Cálculo de custo e validação de soluções
 - Exportação para visualização
 
-✅ **LeitorInstancia** - Parser de arquivos de instância
+**LeitorInstancia** - Parser de arquivos de instância
 - Lê formato padrão OR-Library DC-MST
 - Valida conectividade do grafo
 - Extrai nome da instância automaticamente
 
-✅ **UtilRandomico** - Controle de randomização
+**UtilRandomico** - Controle de randomização
 - Geração de semente baseada em timestamp
 - Suporte para semente manual
 - Números aleatórios inteiros e reais
 
-✅ **Registrador** - Sistema de logging CSV
+**Logger** - Sistema de logging CSV
 - Registro automático de experimentos
 - Formato compatível com análise de dados
 - Cabeçalho padronizado
+
+## Algoritmos Implementados
+
+**AlgGuloso** - Algoritmo Guloso Construtivo
+- Baseado em Kruskal adaptado para restrição de grau
+- Usa Union-Find para detecção de ciclos
+- Ordena arestas por peso crescente
+- Adiciona arestas respeitando grau máximo
+
+**AlgGRandReativo** - GRASP Reativo
+- Construção randomizada com parâmetro α adaptativo
+- Fase de busca local para refinamento
+- Atualização de probabilidades baseada em qualidade
+- Múltiplas iterações para convergência
 
 ## Compilação
 
