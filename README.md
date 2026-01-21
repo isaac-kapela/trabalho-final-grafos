@@ -129,15 +129,25 @@ Após executar o programa, os seguintes arquivos são criados em `results/`:
 - `<nome_instancia>_grafo.txt` - Grafo completo para visualização
 - `log_teste.csv` - Log das execuções (quando implementados os algoritmos)
 
-## Próximos Passos
+## Como Executar Os Experimentos
 
-- [x] Infraestrutura completa
-- [x] Leitura de instâncias OR-Library
-- [ ] Implementar algoritmo guloso
-- [ ] Implementar algoritmo guloso randomizado
-- [ ] Implementar algoritmo guloso randomizado reativo
-- [ ] Executar experimentos (10 execuções por instância)
-- [ ] Gerar relatório com análise dos resultados
+Este projeto conta com um pipeline de execução automatizado. Não é necessário rodar o executável C++ manualmente para cada instância.
+
+### 1. Executar a Bateria de Testes
+O script Python gerencia a execução, aplica timeout para instâncias grandes e salva os resultados em results/log_execucao.csv.
+
+```bash
+# Executa 10 vezes cada instância configurada
+python3 scripts/run_experiments.py
+```
+### 2. Gerar Tabelas para o Relatório
+Após a execução, utilize o gerador de tabelas para criar o arquivo LaTeX com os comparativos de Gap e Tempo.
+
+```bash
+python3 scripts/generate_tables.py > results/tabelas_finais.tex
+```
+
+O arquivo gerado pode ser importado diretamente no Overleaf com \input{tabelas_finais}.
 
 ## Referências
 
