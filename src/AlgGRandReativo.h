@@ -6,6 +6,7 @@
 #include <vector>
 #include <set>
 #include <limits>
+#include <utility>
 
 struct AlphaStats {
     double valor;
@@ -38,7 +39,7 @@ private:
     void inicializarAlfas(const std::vector<double>& opcoesAlfas);
     int selecionarIndiceAlfa();
     void atualizarProbabilidades(double melhorCustoGlobal, double sigma = 10.0);
-    
+
     DadosSolucao construirSolucao(double alpha);
 
 public:

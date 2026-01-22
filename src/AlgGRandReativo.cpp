@@ -39,7 +39,7 @@ void GeradoraMinimaGRR::inicializarAlfas(const std::vector<double>& opcoesAlfas)
 int GeradoraMinimaGRR::selecionarIndiceAlfa() {
     double r = UtilRandomico::realAleatorio();
     double acumulada = 0.0;
-    
+
     for (size_t i = 0; i < alfas.size(); ++i) {
         acumulada += alfas[i].probabilidade;
         if (r <= acumulada) {
@@ -65,7 +65,7 @@ DadosSolucao GeradoraMinimaGRR::construirSolucao(double alpha) {
         int v;
         int idx;
     };
-    
+
     std::vector<Candidato> candidatos;
     
     for (const auto& aresta : adjPreProcessada[raiz]) {
@@ -97,7 +97,7 @@ DadosSolucao GeradoraMinimaGRR::construirSolucao(double alpha) {
                 rclIndices.push_back(k);
             }
         }
-        
+
         int escolhidoIdx = rclIndices[UtilRandomico::inteiroAleatorio(0, rclIndices.size() - 1)];
         Candidato escolhido = validos[escolhidoIdx];
         
@@ -116,7 +116,7 @@ DadosSolucao GeradoraMinimaGRR::construirSolucao(double alpha) {
         }
         
     }
-    
+
     return {arestasArvore, custoTotal, true};
 }
 
